@@ -1,0 +1,34 @@
+{
+  "name": "cache-swap",
+  "version": "0.0.1",
+  "description": "A simple temp file based swap for speeding up operations",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": "",
+  "keywords": [
+    "cache",
+    "swap",
+    "temp",
+    "file"
+  ],
+  "author": "Jacob Gable <jacob.gable@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "coffee-script": "~1.6.2",
+    "mocha": "~1.8.2",
+    "should": "~1.2.2"
+  },
+  "dependencies": {
+    "grunt-simple-mocha": "~0.3.2",
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.3.0",
+    "async": "~0.2.6",
+    "rimraf": "~2.1.4",
+    "lodash": "~1.1.0"
+  }
+}
