@@ -34,16 +34,25 @@ describe("cacheSwap", function() {
 				throw err;
 			}
 
-			fs.readFile(filePath, function(err, tmpContents) {
+			fs.stat(filePath, function(err, stats) {
 				if(err) {
 					throw err;
 				}
 
-				tmpContents = tmpContents.toString();
+				var mode = '0' + (stats.mode & parseInt('777', 8)).toString(8);
+				mode.should.equal('0777');
 
-				tmpContents.should.equal(contents);
+				fs.readFile(filePath, function(err, tmpContents) {
+					if(err) {
+						throw err;
+					}
 
-				done();
+					tmpContents = tmpContents.toString();
+
+					tmpContents.should.equal(contents);
+
+					done();
+				});
 			});
 		});
 	});
