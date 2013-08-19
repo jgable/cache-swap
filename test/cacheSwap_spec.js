@@ -81,7 +81,6 @@ describe("cacheSwap", function() {
 				done();
 			});
 		});
-			
 	});
 
 	it("hasCached (doesn't exist)", function(done) {
@@ -102,6 +101,5 @@ describe("cacheSwap", function() {
 				done();
 			});
 		});
-			
 	});
 });
