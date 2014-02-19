@@ -102,4 +102,25 @@ describe("cacheSwap", function() {
 			});
 		});
 	});
+
+	it("removeCached", function (done) {
+		swap.addCached(category, hash, contents, function(err, filePath) {
+			swap.hasCached(category, hash, function(exists, existsFilePath) {
+				exists.should.equal(true);
+				existsFilePath.should.equal(filePath);
+
+				swap.removeCached(category, hash, function (err) {
+					if (err) {
+						return done(err);
+					}
+
+					swap.hasCached(category, hash, function (exists) {
+						exists.should.equal(false);
+
+						done();
+					});
+				});
+			});
+		});
+	});
 });
