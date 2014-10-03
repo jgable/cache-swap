@@ -1,1 +1,1 @@
-module.exports = require("./lib/CacheSwap");
+module.exports = require('./lib/CacheSwap');

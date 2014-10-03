@@ -11,7 +11,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "node_modules/jshint/bin/jshint lib/*.js test/*.js index.js && node_modules/mocha/bin/mocha"
   },
   "repository": "git@github.com:jgable/cache-swap.git",
   "keywords": [
@@ -28,10 +28,7 @@
     "rimraf": "^2.2.8"
   },
   "devDependencies": {
-    "grunt": "^0.4.1",
-    "grunt-jshint2": "^2.4.4",
-    "grunt-simple-mocha": "^0.3.2",
-    "load-grunt-tasks": "^0.6.0",
+    "jshint": "^2.5.6",
     "mocha": "^1.21.4",
     "should": "^4.0.4"
   }
