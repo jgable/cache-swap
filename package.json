@@ -3,6 +3,10 @@
   "version": "0.0.6",
   "description": "A simple temp file based swap for speeding up operations",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "lib"
+  ],
   "directories": {
     "test": "test"
   },
@@ -19,16 +23,16 @@
   "author": "Jacob Gable <jacob.gable@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "async": "~0.2.6",
-    "rimraf": "~2.1.4",
-    "lodash": "~1.1.0"
+    "async-each-series": "^0.1.0",
+    "lodash": "^2.4.1",
+    "rimraf": "^2.2.8"
   },
   "devDependencies": {
-    "mocha": "~1.8.2",
-    "should": "~1.2.2",
-    "grunt": "~0.4.1",
-    "grunt-jshint2": "~0.1.0",
-    "grunt-simple-mocha": "~0.3.2",
-    "matchdep": "~0.1.2"
+    "grunt": "^0.4.1",
+    "grunt-jshint2": "^2.4.4",
+    "grunt-simple-mocha": "^0.3.2",
+    "load-grunt-tasks": "^0.6.0",
+    "mocha": "^1.21.4",
+    "should": "^4.0.4"
   }
 }
