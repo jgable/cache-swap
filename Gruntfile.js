@@ -1,5 +1,3 @@
-var matchdep = require("matchdep");
-
 module.exports = function(grunt) {
 
 	// load all grunt tasks
