@@ -1,6 +1,6 @@
 {
   "name": "cache-swap",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "A simple temp file based swap for speeding up operations",
   "main": "index.js",
   "files": [
