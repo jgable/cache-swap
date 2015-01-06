@@ -2,7 +2,6 @@
   "name": "cache-swap",
   "version": "0.1.0",
   "description": "A simple temp file based swap for speeding up operations",
-  "main": "index.js",
   "files": [
     "index.js",
     "lib"
@@ -11,7 +10,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node_modules/jshint/bin/jshint lib/*.js test/*.js index.js && node_modules/mocha/bin/mocha"
+    "test": "jshint lib/*.js test/*.js index.js && mocha"
   },
   "repository": "git@github.com:jgable/cache-swap.git",
   "keywords": [
@@ -23,13 +22,13 @@
   "author": "Jacob Gable <jacob.gable@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "async-each-series": "^0.1.0",
-    "lodash": "^2.4.1",
+    "mkdirp": "^0.5.0",
+    "object-assign": "^2.0.0",
     "rimraf": "^2.2.8"
   },
   "devDependencies": {
     "jshint": "^2.5.6",
-    "mocha": "^1.21.4",
+    "mocha": "^2.1.0",
     "should": "^4.0.4"
   }
 }
