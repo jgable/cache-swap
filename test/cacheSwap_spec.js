@@ -3,7 +3,7 @@ var fs = require('fs'),
 
 var should = require('should');
 
-var CacheSwap = require('../lib/cacheSwap');
+var CacheSwap = require('..');
 
 describe('cacheSwap', function () {
 	var swap,
