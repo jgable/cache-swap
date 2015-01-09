@@ -7,52 +7,52 @@ A lightweight file swap cache backed by temp files.
 
 ```javascript
 var swap = new CacheSwap({
-		cacheDirName: "HoganizeSwap"
-	}),
-	processTemplate = function(template, done) {
-		var templateStr = template.content,
-			templatePath = template.path,
-			templateHash = files.shaIt(templateStr);
+    cacheDirName: "HoganizeSwap"
+  }),
+  processTemplate = function(template, done) {
+    var templateStr = template.content,
+      templatePath = template.path,
+      templateHash = files.shaIt(templateStr);
 
-		swap.getCached("hoganize", templateHash, function(err, cached) {
-			if(err) {
-				return done(err);
-			}
+    swap.getCached("hoganize", templateHash, function(err, cached) {
+      if(err) {
+        return done(err);
+      }
 
-			var yeahbrotha,
-				stringed;
+      var yeahbrotha,
+        stringed;
 
-			if(cached) {
-				yeahbrotha = cached.contents;
-				try {
-					addToHoganized(yeahbrotha, templatePath);
-				} catch(e){
-					return done(e);
-				}
+      if(cached) {
+        yeahbrotha = cached.contents;
+        try {
+          addToHoganized(yeahbrotha, templatePath);
+        } catch(e){
+          return done(e);
+        }
 
-				done();
-			} else {
-				yeahbrotha = self._compileTemplate(templateStr, templatePath);
-				// Add the compiled template to the cache swap for next time.
-				swap.addCached("hoganize", templateHash, yeahbrotha, function(err) {
-					if(err) {
-						return done(err);
-					}
+        done();
+      } else {
+        yeahbrotha = self._compileTemplate(templateStr, templatePath);
+        // Add the compiled template to the cache swap for next time.
+        swap.addCached("hoganize", templateHash, yeahbrotha, function(err) {
+          if(err) {
+            return done(err);
+          }
 
-					try {
-						addToHoganized(yeahbrotha, templatePath);
-					} catch(e) {
-						return done(e);
-					}
+          try {
+            addToHoganized(yeahbrotha, templatePath);
+          } catch(e) {
+            return done(e);
+          }
 
-					done();
-				});
-			}
+          done();
+        });
+      }
 
-		});
-	};
+    });
+  };
 ```
 
 ### License
 
-Licensed under the MIT License, Copyright 2013 Jacob Gable
+Licensed under the MIT License, Copyright 2013-2015 Jacob Gable

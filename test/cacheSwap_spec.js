@@ -1,128 +1,128 @@
 var fs = require('fs'),
-	path = require('path');
+  path = require('path');
 
 var should = require('should');
 
 var CacheSwap = require('..');
 
 describe('cacheSwap', function () {
-	var swap,
-		category = 'testcat',
-		hash = '1234',
-		contents = 'Some test contents';
+  var swap,
+    category = 'testcat',
+    hash = '1234',
+    contents = 'Some test contents';
 
-	beforeEach(function (done) {
-		swap = new CacheSwap();
-		swap.clear(category, function (err) {
-			if (err) {
-				throw err;
-			}
+  beforeEach(function (done) {
+    swap = new CacheSwap();
+    swap.clear(category, function (err) {
+      if (err) {
+        throw err;
+      }
 
-			done();
-		});
-	});
+      done();
+    });
+  });
 
-	it('getCachedFilePath', function () {
-		var	expect = path.join(swap.options.tmpDir, swap.options.cacheDirName, category, hash);
+  it('getCachedFilePath', function () {
+    var expect = path.join(swap.options.tmpDir, swap.options.cacheDirName, category, hash);
 
-		swap.getCachedFilePath(category, hash).should.equal(expect);
-	});
+    swap.getCachedFilePath(category, hash).should.equal(expect);
+  });
 
-	it('addCached', function (done) {
-		swap.addCached(category, hash, contents, function (err, filePath) {
-			if (err) {
-				throw err;
-			}
+  it('addCached', function (done) {
+    swap.addCached(category, hash, contents, function (err, filePath) {
+      if (err) {
+        throw err;
+      }
 
-			fs.stat(filePath, function (err, stats) {
-				if (err) {
-					throw err;
-				}
+      fs.stat(filePath, function (err, stats) {
+        if (err) {
+          throw err;
+        }
 
-				/* jshint bitwise: false */
-				var mode = '0' + (stats.mode & parseInt('777', 8)).toString(8);
-				/* jshint bitwise: true */
-				mode.should.equal('0777');
+        /* jshint bitwise: false */
+        var mode = '0' + (stats.mode & parseInt('777', 8)).toString(8);
+        /* jshint bitwise: true */
+        mode.should.equal('0777');
 
-				fs.readFile(filePath, function (err, tmpContents) {
-					if (err) {
-						throw err;
-					}
+        fs.readFile(filePath, function (err, tmpContents) {
+          if (err) {
+            throw err;
+          }
 
-					tmpContents = tmpContents.toString();
+          tmpContents = tmpContents.toString();
 
-					tmpContents.should.equal(contents);
+          tmpContents.should.equal(contents);
 
-					done();
-				});
-			});
-		});
-	});
+          done();
+        });
+      });
+    });
+  });
 
-	it('getCached (doesn\'t exist)', function (done) {
-		swap.getCached(category, hash, function (err, details) {
-			if (err) {
-				throw err;
-			}
+  it('getCached (doesn\'t exist)', function (done) {
+    swap.getCached(category, hash, function (err, details) {
+      if (err) {
+        throw err;
+      }
 
-			should.not.exist(details);
-			done();
-		});
-	});
+      should.not.exist(details);
+      done();
+    });
+  });
 
-	it('getCached (does exist)', function (done) {
-		swap.addCached(category, hash, contents, function (err, filePath) {
-			swap.getCached(category, hash, function (err, details) {
-				if (err) {
-					throw err;
-				}
+  it('getCached (does exist)', function (done) {
+    swap.addCached(category, hash, contents, function (err, filePath) {
+      swap.getCached(category, hash, function (err, details) {
+        if (err) {
+          throw err;
+        }
 
-				should.exist(details);
-				details.contents.should.equal(contents);
-				details.path.should.equal(filePath);
-				done();
-			});
-		});
-	});
+        should.exist(details);
+        details.contents.should.equal(contents);
+        details.path.should.equal(filePath);
+        done();
+      });
+    });
+  });
 
-	it('hasCached (doesn\'t exist)', function (done) {
-		swap.hasCached(category, hash, function (exists, filePath) {
-			exists.should.equal(false);
-			should.not.exist(filePath);
+  it('hasCached (doesn\'t exist)', function (done) {
+    swap.hasCached(category, hash, function (exists, filePath) {
+      exists.should.equal(false);
+      should.not.exist(filePath);
 
-			done();
-		});
-	});
+      done();
+    });
+  });
 
-	it('hasCached (does exist)', function (done) {
-		swap.addCached(category, hash, contents, function (err, filePath) {
-			swap.hasCached(category, hash, function (exists, existsFilePath) {
-				exists.should.equal(true);
-				existsFilePath.should.equal(filePath);
+  it('hasCached (does exist)', function (done) {
+    swap.addCached(category, hash, contents, function (err, filePath) {
+      swap.hasCached(category, hash, function (exists, existsFilePath) {
+        exists.should.equal(true);
+        existsFilePath.should.equal(filePath);
 
-				done();
-			});
-		});
-	});
+        done();
+      });
+    });
+  });
 
-	it('removeCached', function (done) {
-		swap.addCached(category, hash, contents, function (err, filePath) {
-			swap.hasCached(category, hash, function (exists, existsFilePath) {
-				exists.should.equal(true);
-				existsFilePath.should.equal(filePath);
+  it('removeCached', function (done) {
+    swap.addCached(category, hash, contents, function (err, filePath) {
+      swap.hasCached(category, hash, function (exists, existsFilePath) {
+        exists.should.equal(true);
+        existsFilePath.should.equal(filePath);
 
-				swap.removeCached(category, hash, function (err) {
-					if (err) {
-						return done(err);
-					}
+        swap.removeCached(category, hash, function (err) {
+          if (err) {
+            return done(err);
+          }
 
-					swap.hasCached(category, hash, function (exists) {
-						exists.should.equal(false);
+          swap.hasCached(category, hash, function (exists) {
+            exists.should.equal(false);
 
-						done();
-					});
-				});
-			});
-		});
-	});
+            done();
+          });
+        });
+      });
+    });
+  });
 });
