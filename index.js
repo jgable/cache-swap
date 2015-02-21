@@ -1,106 +1,102 @@
 'use strict';
 
-var fs = require('graceful-fs'),
-  path = require('path'),
-  os = require('os');
+var path = require('path');
 
-var assign = require('object-assign'),
-  mkdirp = require('mkdirp'),
-  rimraf = require('rimraf');
+var assign = require('object-assign');
+var fs = require('graceful-fs');
+var mkdirp = require('mkdirp');
+var rimraf = require('rimraf');
+var tmpDir = require('os').tmpDir();
 
-var CacheSwap = function (opts) {
+function CacheSwap(options) {
   this.options = assign({
-    tmpDir: os.tmpDir(),
+    tmpDir: tmpDir,
     cacheDirName: 'defaultCacheSwap'
-  }, opts);
-};
+  }, options);
+}
 
 assign(CacheSwap.prototype, {
-  clear: function (category, done) {
-    var dir = path.join(this.options.tmpDir, this.options.cacheDirName);
-
-    if (category) {
-      dir = path.join(dir, category);
-    }
-
-    // rm -rf for node
-    rimraf(dir, done);
+  clear: function(category, cb) {
+    var dir = path.join(this.options.tmpDir, this.options.cacheDirName, category || '');
+    rimraf(dir, cb);
   },
 
-  hasCached: function (category, hash, done) {
+  hasCached: function(category, hash, cb) {
     var filePath = this.getCachedFilePath(category, hash);
 
-    fs.exists(filePath, function (exists) {
-      return done(exists, exists ? filePath : null);
+    fs.exists(filePath, function(exists) {
+      return cb(exists, exists ? filePath : null);
     });
   },
 
-  getCached: function (category, hash, done) {
+  getCached: function(category, hash, cb) {
     var filePath = this.getCachedFilePath(category, hash);
 
-    fs.readFile(filePath, function (err, fileStream) {
+    fs.readFile(filePath, function(err, fileStream) {
       if (err) {
         if (err.code === 'ENOENT') {
-          return done();
+          cb();
+          return;
         }
 
-        return done(err);
+        cb(err);
+        return;
       }
 
-      done(null, {
+      cb(null, {
         contents: fileStream.toString(),
         path: filePath
       });
     });
   },
 
-  addCached: function (category, hash, contents, done) {
+  addCached: function(category, hash, contents, cb) {
     var filePath = this.getCachedFilePath(category, hash);
 
-    this._prepPath(filePath, function (err) {
-      if (err) {
-        return done(err);
+    mkdirp(path.dirname(filePath), {mode: parseInt('0777', 8)}, function(mkdirErr) {
+      if (mkdirErr) {
+        cb(mkdirErr);
+        return;
       }
 
-      fs.writeFile(filePath, contents, {mode: parseInt('0777', 8)}, function (err) {
-        if (err) {
-          return done(err);
+      fs.writeFile(filePath, contents, {mode: parseInt('0777', 8)}, function(writeErr) {
+        if (writeErr) {
+          cb(writeErr);
+          return;
         }
 
-        fs.chmod(filePath, parseInt('0777', 8), function () {
-          done(null, filePath);
+        fs.chmod(filePath, parseInt('0777', 8), function(chmodErr) {
+          if (chmodErr) {
+            cb(chmodErr);
+            return;
+          }
+
+          cb(null, filePath);
         });
       });
     });
   },
 
-  removeCached: function (category, hash, done) {
+  removeCached: function(category, hash, cb) {
     var filePath = this.getCachedFilePath(category, hash);
 
-    fs.unlink(filePath, function (err) {
+    fs.unlink(filePath, function(err) {
       if (err) {
         if (err.code === 'ENOENT') {
-          return done();
+          cb();
+          return;
         }
-        return done(err);
+
+        cb(err);
+        return;
       }
 
-      done();
+      cb();
     });
   },
 
-  getCachedFilePath: function (category, hash) {
+  getCachedFilePath: function(category, hash) {
     return path.join(this.options.tmpDir, this.options.cacheDirName, category, hash);
-  },
-
-  _prepCategory: function (category, done) {
-    var filePath = this.getCachedFilePath(category, 'prep');
-
-    this._prepPath(filePath, done);
-  },
-
-  _prepPath: function (filePath, done) {
-    mkdirp(path.dirname(filePath), {mode: parseInt('0777', 8)}, done);
   }
 });
 
