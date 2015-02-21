@@ -3,16 +3,15 @@
   "version": "0.1.1",
   "description": "A simple temp file based swap for speeding up operations",
   "files": [
-    "index.js",
-    "lib"
+    "index.js"
   ],
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
-    "test": "jshint test/*.js index.js && mocha"
+    "pretest": "jscs *.js && eslint *.js",
+    "test": "mocha test.js",
+    "test-dot": "mocha test.js --reporter dot",
+    "coverage": "istanbul cover _mocha"
   },
-  "repository": "git@github.com:jgable/cache-swap.git",
+  "repository": "jgable/cache-swap",
   "keywords": [
     "cache",
     "swap",
@@ -20,7 +19,15 @@
     "file"
   ],
   "author": "Jacob Gable <jacob.gable@gmail.com>",
-  "license": "MIT",
+  "contributors": [
+    "Shinnosuke Watanabe <snnskwtnb@gmail.com> (https://github.com/shinnn)"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/jgable/cache-swap/blob/master/LICENSE"
+    }
+  ],
   "dependencies": {
     "graceful-fs": "^3.0.5",
     "mkdirp": "^0.5.0",
@@ -28,8 +35,17 @@
     "rimraf": "^2.2.8"
   },
   "devDependencies": {
-    "jshint": "^2.5.6",
+    "eslint": "^0.14.1",
+    "istanbul": "^0.3.6",
+    "jscs": "^1.11.3",
     "mocha": "^2.1.0",
-    "should": "^5.0.0"
+    "should": "^5.0.1"
+  },
+  "jscsConfig": {
+    "preset": "google",
+    "disallowMultipleVarDecl": null,
+    "maximumLineLength": 98,
+    "requireBlocksOnNewline": true,
+    "validateLineBreaks": "LF"
   }
 }
