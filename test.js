@@ -36,7 +36,7 @@ describe('cacheSwap', function() {
         }
 
         var mode = '0' + (stats.mode & parseInt('777', 8)).toString(8);
-        mode.should.equal('0777');
+        mode.should.equal(process.platform === 'win32' ? '0666' : '0777');
 
         fs.readFile(filePath, function(readErr, tmpContents) {
           if (readErr) {
