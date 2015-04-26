@@ -7,10 +7,9 @@ var fs = require('graceful-fs');
 var should = require('should');
 
 describe('cacheSwap', function() {
-  var swap,
-    category = 'testcat',
-    hash = '1234',
-    contents = 'Some test contents';
+  var swap;
+  var category = 'testcat';
+  var hash = '1234';
 
   beforeEach(function(done) {
     swap = new CacheSwap();
@@ -23,7 +22,7 @@ describe('cacheSwap', function() {
   });
 
   it('addCached', function(done) {
-    swap.addCached(category, hash, contents, function(err, filePath) {
+    swap.addCached(category, hash, 'foo', function(err, filePath) {
       if (err) {
         done(err);
         return;
@@ -44,7 +43,7 @@ describe('cacheSwap', function() {
             return;
           }
 
-          String(tmpContents).should.equal(contents);
+          String(tmpContents).should.equal('foo');
           done();
         });
       });
@@ -64,7 +63,7 @@ describe('cacheSwap', function() {
   });
 
   it('getCached (does exist)', function(done) {
-    swap.addCached(category, hash, contents, function(addErr, filePath) {
+    swap.addCached(category, hash, 'bar', function(addErr, filePath) {
       if (addErr) {
         done(addErr);
         return;
@@ -77,7 +76,7 @@ describe('cacheSwap', function() {
         }
 
         should.exist(details);
-        details.contents.should.equal(contents);
+        details.contents.should.equal('bar');
         details.path.should.equal(filePath);
         done();
       });
@@ -94,7 +93,7 @@ describe('cacheSwap', function() {
   });
 
   it('hasCached (does exist)', function(done) {
-    swap.addCached(category, hash, contents, function(err, filePath) {
+    swap.addCached(category, hash, 'baz', function(err, filePath) {
       if (err) {
         done(err);
         return;
@@ -110,7 +109,7 @@ describe('cacheSwap', function() {
   });
 
   it('removeCached', function(done) {
-    swap.addCached(category, hash, contents, function(err, filePath) {
+    swap.addCached(category, hash, 'qux', function(err, filePath) {
       if (err) {
         done(err);
         return;
