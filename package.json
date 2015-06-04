@@ -6,7 +6,7 @@
     "index.js"
   ],
   "scripts": {
-    "pretest": "eslint --config node_modules/@shinnn/eslintrc-node/rc.json --env mocha index.js test.js",
+    "pretest": "eslint --config node_modules/@shinnn/eslintrc-node/rc.json index.js test.js",
     "test": "mocha test.js",
     "test-dot": "mocha test.js --reporter dot",
     "coverage": "istanbul cover _mocha"
