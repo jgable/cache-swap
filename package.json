@@ -1,6 +1,6 @@
 {
   "name": "cache-swap",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A simple temp file based swap for speeding up operations",
   "files": [
     "index.js"
@@ -27,7 +27,7 @@
     "graceful-fs": "^3.0.8",
     "mkdirp": "^0.5.1",
     "object-assign": "^3.0.0",
-    "rimraf": "^2.3.4"
+    "rimraf": "^2.4.0"
   },
   "devDependencies": {
     "@shinnn/eslintrc-node": "^1.0.2",
