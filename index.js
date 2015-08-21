@@ -18,7 +18,7 @@ function CacheSwap(options) {
 assign(CacheSwap.prototype, {
   clear: function(category, cb) {
     var dir = path.join(this.options.tmpDir, this.options.cacheDirName, category || '');
-    rimraf(dir, cb);
+    rimraf(dir, {disableGlob: true}, cb);
   },
 
   hasCached: function(category, hash, cb) {
