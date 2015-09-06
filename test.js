@@ -1,44 +1,44 @@
 /* eslint-env mocha */
 'use strict';
 
-var path = require('path');
+const path = require('path');
 
-var CacheSwap = require('./');
-var fs = require('graceful-fs');
-var should = require('should');
+const CacheSwap = require('./');
+const fs = require('graceful-fs');
+const should = require('should');
 
-describe('cacheSwap', function() {
-  var swap;
-  var category = 'testcat';
-  var hash = '1234';
+describe('cacheSwap', () => {
+  let swap;
+  const category = 'testcat';
+  const hash = '1234';
 
-  beforeEach(function(done) {
+  beforeEach(done => {
     swap = new CacheSwap();
     swap.clear(category, done);
   });
 
-  it('getCachedFilePath', function() {
-    var expect = path.join(swap.options.tmpDir, swap.options.cacheDirName, category, hash);
+  it('getCachedFilePath', () => {
+    let expect = path.join(swap.options.tmpDir, swap.options.cacheDirName, category, hash);
     swap.getCachedFilePath(category, hash).should.equal(expect);
   });
 
-  it('addCached', function(done) {
-    swap.addCached(category, hash, 'foo', function(err, filePath) {
+  it('addCached', done => {
+    swap.addCached(category, hash, 'foo', (err, filePath) => {
       if (err) {
         done(err);
         return;
       }
 
-      fs.stat(filePath, function(statErr, stats) {
+      fs.stat(filePath, (statErr, stats) => {
         if (statErr) {
           done(statErr);
           return;
         }
 
-        var mode = '0' + (stats.mode & parseInt('777', 8)).toString(8);
+        const mode = '0' + (stats.mode & parseInt('777', 8)).toString(8);
         mode.should.equal(process.platform === 'win32' ? '0666' : '0777');
 
-        fs.readFile(filePath, function(readErr, tmpContents) {
+        fs.readFile(filePath, (readErr, tmpContents) => {
           if (readErr) {
             done(readErr);
             return;
@@ -51,8 +51,8 @@ describe('cacheSwap', function() {
     });
   });
 
-  it('getCached (doesn\'t exist)', function(done) {
-    swap.getCached(category, hash, function(err, details) {
+  it('getCached (doesn\'t exist)', done => {
+    swap.getCached(category, hash, (err, details) => {
       if (err) {
         done(err);
         return;
@@ -63,14 +63,14 @@ describe('cacheSwap', function() {
     });
   });
 
-  it('getCached (does exist)', function(done) {
-    swap.addCached(category, hash, 'bar', function(addErr, filePath) {
+  it('getCached (does exist)', done => {
+    swap.addCached(category, hash, 'bar', (addErr, filePath) => {
       if (addErr) {
         done(addErr);
         return;
       }
 
-      swap.getCached(category, hash, function(getErr, details) {
+      swap.getCached(category, hash, (getErr, details) => {
         if (getErr) {
           done(getErr);
           return;
@@ -84,8 +84,8 @@ describe('cacheSwap', function() {
     });
   });
 
-  it('hasCached (doesn\'t exist)', function(done) {
-    swap.hasCached(category, hash, function(exists, filePath) {
+  it('hasCached (doesn\'t exist)', done => {
+    swap.hasCached(category, hash, (exists, filePath) => {
       exists.should.equal(false);
       should.not.exist(filePath);
 
@@ -93,14 +93,14 @@ describe('cacheSwap', function() {
     });
   });
 
-  it('hasCached (does exist)', function(done) {
-    swap.addCached(category, hash, 'baz', function(err, filePath) {
+  it('hasCached (does exist)', done => {
+    swap.addCached(category, hash, 'baz', (err, filePath) => {
       if (err) {
         done(err);
         return;
       }
 
-      swap.hasCached(category, hash, function(exists, existsFilePath) {
+      swap.hasCached(category, hash, (exists, existsFilePath) => {
         exists.should.equal(true);
         existsFilePath.should.equal(filePath);
 
@@ -109,24 +109,24 @@ describe('cacheSwap', function() {
     });
   });
 
-  it('removeCached', function(done) {
-    swap.addCached(category, hash, 'qux', function(err, filePath) {
+  it('removeCached', done => {
+    swap.addCached(category, hash, 'qux', (err, filePath) => {
       if (err) {
         done(err);
         return;
       }
 
-      swap.hasCached(category, hash, function(exists, existsFilePath) {
+      swap.hasCached(category, hash, (exists, existsFilePath) => {
         exists.should.equal(true);
         existsFilePath.should.equal(filePath);
 
-        swap.removeCached(category, hash, function(removeErr) {
+        swap.removeCached(category, hash, removeErr => {
           if (removeErr) {
             done(removeErr);
             return;
           }
 
-          swap.hasCached(category, hash, function(result) {
+          swap.hasCached(category, hash, result => {
             result.should.equal(false);
             done();
           });
