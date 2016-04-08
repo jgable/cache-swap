@@ -6,7 +6,7 @@
     "index.js"
   ],
   "scripts": {
-    "pretest": "eslint --config @shinnn/node-legacy index.js test.js",
+    "pretest": "eslint --fix --config @shinnn/node-legacy index.js test.js",
     "test": "mocha test.js",
     "test-dot": "mocha test.js --reporter dot",
     "coverage": "istanbul cover _mocha"
@@ -30,10 +30,10 @@
     "rimraf": "^2.4.0"
   },
   "devDependencies": {
-    "@shinnn/eslint-config-node-legacy": "^1.0.0",
-    "eslint": "^1.7.3",
+    "@shinnn/eslint-config-node-legacy": "^2.0.0",
+    "eslint": "^2.7.0",
     "istanbul": "^0.4.0",
     "mocha": "^2.3.3",
-    "should": "^7.1.1"
+    "should": "^8.3.0"
   }
 }
