@@ -11,7 +11,8 @@ var tmpDir = require('os').tmpDir();
 function CacheSwap(options) {
   this.options = assign({
     tmpDir: tmpDir,
-    cacheDirName: 'defaultCacheSwap'
+    cacheDirName: 'defaultCacheSwap',
+    light: false
   }, options);
 }
 
@@ -21,16 +22,16 @@ assign(CacheSwap.prototype, {
     rimraf(dir, {disableGlob: true}, cb);
   },
 
-  hasCached: function(category, hash, cb) {
-    var filePath = this.getCachedFilePath(category, hash);
+  hasCached: function(category, hash, filename, cb) {
+    var filePath = this.getCachedFilePath(category, hash, filename);
 
     fs.exists(filePath, function(exists) {
       return cb(exists, exists ? filePath : null);
     });
   },
 
-  getCached: function(category, hash, cb) {
-    var filePath = this.getCachedFilePath(category, hash);
+  getCached: function(category, hash, filename, cb) {
+    var filePath = this.getCachedFilePath(category, hash, filename);
 
     fs.readFile(filePath, function(err, fileStream) {
       if (err) {
@@ -50,13 +51,18 @@ assign(CacheSwap.prototype, {
     });
   },
 
-  addCached: function(category, hash, contents, cb) {
-    var filePath = this.getCachedFilePath(category, hash);
+  addCached: function(category, hash, contents, filename, cb) {
+    var filePath = this.getCachedFilePath(category, hash, filename);
+    var self = this;
 
     mkdirp(path.dirname(filePath), {mode: parseInt('0777', 8)}, function(mkdirErr) {
       if (mkdirErr) {
         cb(mkdirErr);
         return;
+      }
+
+      if(self.options.light) {
+        contents = hash;
       }
 
       fs.writeFile(filePath, contents, {mode: parseInt('0777', 8)}, function(writeErr) {
@@ -77,8 +83,8 @@ assign(CacheSwap.prototype, {
     });
   },
 
-  removeCached: function(category, hash, cb) {
-    var filePath = this.getCachedFilePath(category, hash);
+  removeCached: function(category, hash, filename, cb) {
+    var filePath = this.getCachedFilePath(category, hash, filename);
 
     fs.unlink(filePath, function(err) {
       if (err) {
@@ -95,7 +101,11 @@ assign(CacheSwap.prototype, {
     });
   },
 
-  getCachedFilePath: function(category, hash) {
+  getCachedFilePath: function(category, hash, filename) {
+    if(this.options.light) {
+      return path.join(this.options.tmpDir, this.options.cacheDirName, category, filename).replace(/\.\w+/, '');
+    }
+
     return path.join(this.options.tmpDir, this.options.cacheDirName, category, hash);
   }
 });
