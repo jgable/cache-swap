@@ -61,7 +61,7 @@ assign(CacheSwap.prototype, {
         return;
       }
 
-      if(self.options.light) {
+      if (self.options.light) {
         contents = hash;
       }
 
@@ -102,7 +102,7 @@ assign(CacheSwap.prototype, {
   },
 
   getCachedFilePath: function(category, hash, filename) {
-    if(this.options.light) {
+    if (this.options.light) {
       return path.join(this.options.tmpDir, this.options.cacheDirName, category, filename).replace(/\.\w+/, '');
     }
 
