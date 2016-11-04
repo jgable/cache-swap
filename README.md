@@ -7,6 +7,20 @@
 
 A lightweight file swap cache backed by temp files.
 
+## Constructor
+
+var swap = new CacheSwap({
+    cacheDirName: 'my-cache'
+  });
+
+## Settings
+
+The constructor accepts an optional settings object with the following settings:
+
+1. tmpDir [String] => directory where the cached directory will be saved; **Default**: Your OS's tmp directory
+2. cacheDirName [String] => name of the cached directory; **Default**: defaultCacheSwap
+3. light [Boolean] => allows you to store only the hash digest of your files as opposed to the entire contents; **Default**: false
+
 ## Example
 
 ```javascript
